@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1075067447079",
+    "project_id": "therapy-d63b9",
+    "storage_bucket": "therapy-d63b9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1075067447079:android:c8d7afa9b201e4264dab02",
+        "android_client_info": {
+          "package_name": "com.itsmushi.therapy"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1075067447079-87497j8q8grkbphlrn1a0jfmigu9scm1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.itsmushi.therapy",
+            "certificate_hash": "5e6fc0fe2f332716867e97806ec1109612e06e3b"
+          }
+        },
+        {
+          "client_id": "1075067447079-ru1vq3ilrf2t4vmevhrjej952j9jqukk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAkNATjpNIjRMYgWR96EFssvGfAaHG7kmg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1075067447079-ru1vq3ilrf2t4vmevhrjej952j9jqukk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
