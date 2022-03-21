@@ -6,12 +6,11 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 class HttpService {
-  static final String baseUrl =
-      'https://europe-west3-therapy-d63b9.cloudfunctions.net/measure_paralysis';
+  static final String baseUrl = 'europe-west3-therapy-d63b9.cloudfunctions.net';
   static final String baseStreamUrl = 'rtmp://itsmushi.me/live';
 
   Uri getApiUrl(String url, {Map<String, dynamic>? queryParameters}) {
-    return Uri.http(baseUrl, url, queryParameters);
+    return Uri.https(baseUrl, url, queryParameters);
   }
 
   Future<http.Response> httpPost(String url, body,

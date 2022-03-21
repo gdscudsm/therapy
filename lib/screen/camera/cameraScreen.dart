@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:therapy/app.dart';
 import 'package:therapy/appStates/streamUrlState.dart';
 import 'package:therapy/core/helperFunctions.dart';
+import 'package:therapy/core/models/exerciseResponseModel.dart';
 import 'package:therapy/screen/camera/components/feedback.dart';
 import 'package:video_stream/camera.dart';
 import 'package:wakelock/wakelock.dart';
@@ -134,7 +135,10 @@ class _CameraScreenState extends State<CameraScreen>
                     return Text("Loading");
                   }
                   final data = snapshot.requireData;
-                  print(data);
+                  print(data.docs.last.data());
+                  // ExerciseResponse =
+                  //     ExerciseResponse.fromJson(data.docs.last.data().toString());
+                  // String message = data.docs.last.data();
 
                   return CustomFeedback(
                       feedback: "feedback" + data.size.toString());
@@ -204,7 +208,7 @@ class _CameraScreenState extends State<CameraScreen>
             _streamUrl = value,
             await controller!
                 .startVideoStreaming(value!, androidUseOpenGL: true),
-            Provider.of<StreamUrlState>(context, listen: false)
+            await Provider.of<StreamUrlState>(context, listen: false)
                 .sendStreamUrl(value, userId)
           });
     } on CameraException catch (e) {
