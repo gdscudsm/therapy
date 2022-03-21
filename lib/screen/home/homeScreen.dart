@@ -5,7 +5,9 @@ import 'package:provider/provider.dart';
 import 'package:therapy/appStates/googleSignInState.dart';
 import 'package:therapy/core/helperFunctions.dart';
 import 'package:therapy/screen/camera/cameraScreen.dart';
+import 'package:therapy/screen/exerciceInstruction/exerciseInstruction.dart';
 import 'package:therapy/screen/registerLoginScreen.dart';
+import 'package:therapy/shared/sharedComponents/customButton.dart';
 import 'package:therapy/shared/sharedComponents/loader.dart';
 
 import '../../app.dart';
@@ -19,6 +21,38 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  showAlertDialog(BuildContext context) {
+    // set up the buttons
+    Widget cancelButton = CustomClientButton(
+      text: 'Exercise',
+      clickHandler: (context) =>
+          {Navigator.of(context).pushNamed(CameraScreen.routeName)},
+    );
+    Widget continueButton = CustomClientButton(
+      text: 'Instrution',
+      clickHandler: (context) {
+        Navigator.of(context).pushNamed(ExerciseInstructionScreen.routeName);
+      },
+    );
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      // title: Text(AppLocalizations.of(context).receiveDada),
+      content:
+          Text("Do you want to view instruction or go to exercise directly"),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -72,10 +106,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     Text("uid" + user.uid),
                     ElevatedButton(
                         onPressed: () {
-                          Navigator.of(context)
-                              .pushNamed(CameraScreen.routeName);
+                          showAlertDialog(context);
                         },
-                        child: Text("To Camera"))
+                        child: Text("Exercise"))
                   ],
                 ),
               );

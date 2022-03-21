@@ -45,11 +45,15 @@ class _SplashScreenState extends State<SplashScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Image.asset(
-                  "assets/logos/logo.png",
+                  "assets/logos/logo2 copy.png",
                   width: MediaQuery.of(context).size.width * 0.6,
                   height: MediaQuery.of(context).size.height * 0.5,
                 )
               ],
+            ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.07,
+              width: MediaQuery.of(context).size.width,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -67,17 +71,6 @@ class _SplashScreenState extends State<SplashScreen> {
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.07,
               width: MediaQuery.of(context).size.width,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Image.asset(
-                  "assets/logos/inspire.png",
-                  width: MediaQuery.of(context).size.width * 0.3,
-                  height: MediaQuery.of(context).size.height * 0.03,
-                )
-              ],
             ),
           ],
         ),

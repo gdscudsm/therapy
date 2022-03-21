@@ -6,6 +6,7 @@ import 'package:therapy/appStates/googleSignInState.dart';
 import 'package:therapy/appStates/sampleState.dart';
 import 'package:therapy/appStates/streamUrlState.dart';
 import 'package:therapy/screen/camera/cameraScreen.dart';
+import 'package:therapy/screen/exerciceInstruction/exerciseInstruction.dart';
 import 'package:therapy/screen/home/homeScreen.dart';
 
 import 'package:therapy/screen/registerLoginScreen.dart';
@@ -43,7 +44,9 @@ class _MyAppState extends State<MyApp> {
         routes: {
           RegisterLoginScreen.routeName: (_) => RegisterLoginScreen(),
           HomeScreen.routeName: (_) => HomeScreen(),
-          CameraScreen.routeName: (_) => CameraScreen()
+          CameraScreen.routeName: (_) => CameraScreen(),
+          ExerciseInstructionScreen.routeName: (_) =>
+              ExerciseInstructionScreen()
         },
       ),
     );
