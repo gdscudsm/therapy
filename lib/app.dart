@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 
 import 'package:provider/provider.dart';
 import 'package:therapy/appStates/googleSignInState.dart';
-import 'package:therapy/appStates/sampleState.dart';
+
 import 'package:therapy/appStates/streamUrlState.dart';
 import 'package:therapy/screen/camera/cameraScreen.dart';
 import 'package:therapy/screen/exerciceInstruction/exerciseInstruction.dart';
@@ -27,7 +27,6 @@ class _MyAppState extends State<MyApp> {
     ]);
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider.value(value: SampleState()),
         ChangeNotifierProvider.value(value: GoogleSignInState()),
         ChangeNotifierProvider.value(value: StreamUrlState()),
       ],
@@ -35,7 +34,7 @@ class _MyAppState extends State<MyApp> {
         title: 'therapy',
         theme: ThemeData(
           // textTheme: GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme),
-          primarySwatch: Colors.deepOrange,
+          primarySwatch: Colors.cyan,
         ),
         debugShowCheckedModeBanner: false,
         home: SafeArea(

@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -27,9 +28,11 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        // color: Contants.splashBackground,
         decoration: BoxDecoration(
           image: DecorationImage(
+            colorFilter: new ColorFilter.mode(
+                Colors.black.withOpacity(0.9), BlendMode.dstATop),
+            opacity: 0.7,
             image: AssetImage("assets/images/splash/background.png"),
             fit: BoxFit.cover,
           ),
@@ -38,22 +41,31 @@ class _SplashScreenState extends State<SplashScreen> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             SizedBox(
-              height: MediaQuery.of(context).size.height * 0.10,
+              height: MediaQuery.of(context).size.height * 0.45,
               width: MediaQuery.of(context).size.width,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image.asset(
-                  "assets/logos/logo2 copy.png",
-                  width: MediaQuery.of(context).size.width * 0.6,
-                  height: MediaQuery.of(context).size.height * 0.5,
-                )
-              ],
             ),
             SizedBox(
-              height: MediaQuery.of(context).size.height * 0.07,
-              width: MediaQuery.of(context).size.width,
+              width: MediaQuery.of(context).size.width * 0.8,
+              height: MediaQuery.of(context).size.height * 0.2,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.7,
+                      child: AutoSizeText(
+                        "Hello, Welcome to Digital Physiotherapy",
+                        textAlign: TextAlign.center,
+                        maxLines: 2,
+                        style: TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.bold),
+                        maxFontSize: 32,
+                        minFontSize: 30,
+                      )),
+                ],
+              ),
+            ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.01,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -64,7 +76,7 @@ class _SplashScreenState extends State<SplashScreen> {
                   child: CustomSlider(
                       onSlide: (BuildContext context) =>
                           {sliderHandler(context)},
-                      slideText: "Swipe to Start"),
+                      slideText: "Swipe to get started"),
                 )
               ],
             ),

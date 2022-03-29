@@ -12,11 +12,12 @@ class CustomClientButton extends StatelessWidget {
       onPressed: () => {clickHandler(context)},
       child: Text(
         text,
-        style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+        style: TextStyle(
+            fontSize: 12, fontWeight: FontWeight.bold, color: Colors.white),
       ),
       style: ElevatedButton.styleFrom(
         padding: EdgeInsets.symmetric(vertical: 12, horizontal: 35),
-        primary: Colors.deepOrange,
+        // primary: Colors.deepOrange,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(18.0),
         ),

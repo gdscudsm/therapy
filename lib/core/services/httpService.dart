@@ -16,7 +16,9 @@ class HttpService {
   Future<http.Response> httpPost(String url, body,
       {Map<String, dynamic>? queryParameters, bool useToken = true}) async {
     Uri apiUrl = getApiUrl(url, queryParameters: queryParameters);
-
+    print("post values");
+    print(url);
+    print(body);
     return http.post(
       apiUrl,
       headers: {

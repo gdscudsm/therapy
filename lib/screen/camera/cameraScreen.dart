@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -8,9 +9,11 @@ import 'package:therapy/appStates/streamUrlState.dart';
 import 'package:therapy/core/helperFunctions.dart';
 import 'package:therapy/core/models/exerciseResponseModel.dart';
 import 'package:therapy/screen/camera/components/feedback.dart';
+import 'package:therapy/shared/sharedComponents/customToast.dart';
 import 'package:video_stream/camera.dart';
 import 'package:wakelock/wakelock.dart';
 
+import '../../shared/sharedComponents/customButton.dart';
 import 'components/feedback.dart';
 
 class CameraScreen extends StatefulWidget {
@@ -30,18 +33,6 @@ Future<void> initCameras() async {
   }
 }
 
-/// Returns a suitable camera icon for [direction].
-IconData getCameraLensIcon(CameraLensDirection direction) {
-  switch (direction) {
-    case CameraLensDirection.back:
-      return Icons.camera_rear;
-    case CameraLensDirection.front:
-      return Icons.camera_front;
-    case CameraLensDirection.external:
-      return Icons.camera;
-  }
-}
-
 void logError(String code, String message) =>
     print('Error: $code\nError Message: $message');
 
@@ -49,10 +40,68 @@ class _CameraScreenState extends State<CameraScreen>
     with WidgetsBindingObserver {
   CameraController? controller;
   String? userId;
+  TextStyle _feedbackStyle = TextStyle(
+    fontSize: 20,
+    fontWeight: FontWeight.bold,
+  );
+
+  showAlertDialog(BuildContext context) {
+    // set up the buttons
+    CollectionReference handCollection =
+        FirebaseFirestore.instance.collection('users');
+    Widget cancelButton = CustomClientButton(
+      text: 'Left',
+      clickHandler: (context) => {
+        handCollection
+            .doc(userId)
+            .set({'paralysedHand': 'Left'}, SetOptions(merge: true))
+            .then((value) => {
+                  isHandSelected = true,
+                  Navigator.pop(context),
+                  onNewCameraSelected(cameras[1])
+                })
+            .catchError((error) {
+              isHandSelected = true;
+              CustomToast.error(context);
+              Navigator.pop(context);
+            }),
+      },
+    );
+    Widget continueButton = CustomClientButton(
+        text: 'Right',
+        clickHandler: (context) => {
+              handCollection
+                  .doc(userId)
+                  .set({'paralysedHand': 'Right'}, SetOptions(merge: true))
+                  .then((value) => {
+                        Navigator.pop(context),
+                        isHandSelected = true,
+                        onNewCameraSelected(cameras[1])
+                      })
+                  .catchError((error) {
+                    CustomToast.error(context);
+                    isHandSelected = true;
+                    Navigator.pop(context);
+                  }),
+            });
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      content: Text("Which are hand are hand are you doing exercise for?"),
+      actions: [cancelButton, continueButton],
+    );
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
 
   bool get isStreaming => controller!.value.isStreamingVideoRtmp;
   bool isVisible = true;
   Timer? _timer;
+  bool isHandSelected = false;
 
   @override
   initState() {
@@ -113,6 +162,9 @@ class _CameraScreenState extends State<CameraScreen>
 
   @override
   Widget build(BuildContext context) {
+    isHandSelected
+        ? null
+        : Future.delayed(Duration.zero, () => showAlertDialog(context));
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
@@ -121,32 +173,52 @@ class _CameraScreenState extends State<CameraScreen>
       body: Column(
         children: <Widget>[
           Expanded(
-              flex: 1,
+              flex: 2,
               // child:
-              child: StreamBuilder<QuerySnapshot>(
-                stream: therapy,
-                builder: (BuildContext contenxt,
-                    AsyncSnapshot<QuerySnapshot> snapshot) {
-                  if (snapshot.hasError) {
-                    return Text('Something went wrong');
-                  }
+              child: Container(
+                margin: EdgeInsets.only(top: 14, left: 12, right: 12),
+                child: StreamBuilder<QuerySnapshot>(
+                  stream: therapy,
+                  builder: (BuildContext contenxt,
+                      AsyncSnapshot<QuerySnapshot> snapshot) {
+                    if (snapshot.hasError) {
+                      return Text(
+                        'Something went wrong',
+                        style: _feedbackStyle,
+                      );
+                    }
 
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Text("Loading");
-                  }
-                  final data = snapshot.requireData;
-                  print(data.docs.last.data());
-                  // ExerciseResponse =
-                  //     ExerciseResponse.fromJson(data.docs.last.data().toString());
-                  // String message = data.docs.last.data();
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Text(
+                        "Loading",
+                        style: _feedbackStyle,
+                      );
+                    }
+                    final data = snapshot.requireData;
+                    // print(data.docs);
+                    // print(data.docs.last.data());
 
-                  return CustomFeedback(
-                      feedback: "feedback" + data.size.toString());
-                },
-              )
-              // CustomFeedback(feedback: "feedback")
+                    if (data.docs.length == 0) {
+                      return Text(
+                        'Your feedback will appear here',
+                        style: _feedbackStyle,
+                      );
+                    }
 
-              ),
+                    Map<String, dynamic> result =
+                        data.docChanges.last.doc.data() as Map<String, dynamic>;
+
+                    return AutoSizeText(
+                      "feedback" + result["message"] == "null"
+                          ? result["error"].message
+                          : result["message"],
+                      maxFontSize: 20,
+                      maxLines: 4,
+                      style: _feedbackStyle,
+                    );
+                  },
+                ),
+              )),
           Expanded(
             flex: 6,
             child: Container(
@@ -157,12 +229,11 @@ class _CameraScreenState extends State<CameraScreen>
                 ),
               ),
               decoration: BoxDecoration(
-                color: Colors.black,
                 border: Border.all(
                   color:
                       controller != null && controller!.value.isRecordingVideo
                           ? controller!.value.isStreamingVideoRtmp
-                              ? Colors.redAccent
+                              ? Colors.cyan
                               : Colors.orangeAccent
                           : controller != null &&
                                   controller!.value.isStreamingVideoRtmp
@@ -173,16 +244,7 @@ class _CameraScreenState extends State<CameraScreen>
               ),
             ),
           ),
-          _captureControlRowWidget(),
-          Padding(
-            padding: const EdgeInsets.all(5.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                _cameraTogglesRowWidget(),
-              ],
-            ),
-          ),
+          Expanded(child: _captureControlRowWidget()),
         ],
       ),
     );
@@ -204,12 +266,16 @@ class _CameraScreenState extends State<CameraScreen>
     }
 
     try {
-      Helper.getStreamUrl().then((value) async => {
-            _streamUrl = value,
-            await controller!
-                .startVideoStreaming(value!, androidUseOpenGL: true),
-            await Provider.of<StreamUrlState>(context, listen: false)
-                .sendStreamUrl(value, userId)
+      Helper.getStreamUrl().then((streamUrl) async => {
+            _streamUrl = streamUrl,
+            controller!
+                .startVideoStreaming(streamUrl!, androidUseOpenGL: true)
+                .then((v) async {
+              Future.delayed(Duration(seconds: 6)).then((val) async {
+                Provider.of<StreamUrlState>(context, listen: false)
+                    .sendStreamUrl(streamUrl, userId);
+              });
+            }),
           });
     } on CameraException catch (e) {
       _showCameraException(e);
@@ -244,8 +310,8 @@ class _CameraScreenState extends State<CameraScreen>
       mainAxisSize: MainAxisSize.max,
       children: <Widget>[
         IconButton(
-          icon: const Icon(Icons.watch),
-          color: Colors.blue,
+          icon: const Icon(Icons.play_circle_outline_rounded),
+          color: Colors.cyan,
           onPressed: controller != null &&
                   controller!.value.isInitialized &&
                   !controller!.value.isStreamingVideoRtmp
@@ -256,7 +322,7 @@ class _CameraScreenState extends State<CameraScreen>
           icon: controller != null && controller!.value.isStreamingPaused
               ? Icon(Icons.play_arrow)
               : Icon(Icons.pause),
-          color: Colors.blue,
+          color: Colors.cyan,
           onPressed: controller != null &&
                   controller!.value.isInitialized &&
                   (controller!.value.isStreamingVideoRtmp)
@@ -277,33 +343,6 @@ class _CameraScreenState extends State<CameraScreen>
         )
       ],
     );
-  }
-
-  /// Display a row of toggle to select the camera (or a message if no camera is available).
-  Widget _cameraTogglesRowWidget() {
-    final List<Widget> toggles = <Widget>[];
-
-    if (cameras.isEmpty) {
-      return const Text('No camera found');
-    } else {
-      for (CameraDescription cameraDescription in cameras) {
-        toggles.add(
-          SizedBox(
-            width: 90.0,
-            child: RadioListTile<CameraDescription>(
-              title: Icon(getCameraLensIcon(cameraDescription.lensDirection)),
-              groupValue: controller!.description,
-              value: cameraDescription,
-              onChanged: controller!.value.isRecordingVideo
-                  ? null
-                  : onNewCameraSelected,
-            ),
-          ),
-        );
-      }
-    }
-
-    return Row(children: toggles);
   }
 
   String timestamp() => DateTime.now().millisecondsSinceEpoch.toString();

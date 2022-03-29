@@ -24,20 +24,26 @@ class CustomSlider extends StatelessWidget {
                         _key.currentState!.reset(),
                       });
             },
+            innerColor: Colors.cyan,
             sliderRotate: false,
             alignment: Alignment.centerRight,
-            outerColor: Color.fromRGBO(245, 25, 161, 1),
+            outerColor: Colors.transparent,
             child: Container(
               margin: EdgeInsets.only(left: 20),
               child: Text(
                 slideText,
                 style: TextStyle(
                   fontSize: 20,
-                  color: Colors.white,
+                  color: Colors.cyan,
                 ),
               ),
+              // decoration:
+              //     BoxDecoration(border: Border.all(color: Colors.white)),
             ),
-            sliderButtonIcon: Icon(Icons.forward),
+            sliderButtonIcon: Icon(
+              Icons.chevron_right_outlined,
+              color: Colors.white,
+            ),
           ),
         );
       },

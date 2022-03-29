@@ -10,7 +10,7 @@ class CustomFeedback extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       feedback,
-      style: TextStyle(fontSize: 12),
+      style: TextStyle(fontSize: 14),
     );
   }
 }
