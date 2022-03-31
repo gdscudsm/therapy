@@ -31,6 +31,8 @@
 .pub/
 /build/
 
+/frontendApp/build/
+
 # Web related
 lib/generated_plugin_registrant.dart
 
@@ -44,3 +46,11 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+
+/backend/__pycache__
+/backend/test.mp4
+/backend/test.avi
+/backend/testing.avi
+/backend/.gcloudignore
+/backend/urls.py
