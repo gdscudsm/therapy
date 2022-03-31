@@ -10,6 +10,7 @@ import 'package:therapy/core/helperFunctions.dart';
 import 'package:therapy/core/models/exerciseResponseModel.dart';
 import 'package:therapy/screen/camera/components/feedback.dart';
 import 'package:therapy/shared/sharedComponents/customToast.dart';
+import 'package:therapy/shared/sharedComponents/loader.dart';
 import 'package:video_stream/camera.dart';
 import 'package:wakelock/wakelock.dart';
 
@@ -189,10 +190,7 @@ class _CameraScreenState extends State<CameraScreen>
                     }
 
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Text(
-                        "Loading",
-                        style: _feedbackStyle,
-                      );
+                      return Loader();
                     }
                     final data = snapshot.requireData;
                     // print(data.docs);
@@ -207,11 +205,15 @@ class _CameraScreenState extends State<CameraScreen>
 
                     Map<String, dynamic> result =
                         data.docChanges.last.doc.data() as Map<String, dynamic>;
-
+                    if (result == null) {
+                      CustomToast.msg("Start again for another exercise");
+                      Navigator.pop(context);
+                    }
+                    String _feedback = result["message"] == "none"
+                        ? result["error"]["message"]
+                        : result["message"] ?? "Sorry something went wrong";
                     return AutoSizeText(
-                      "feedback" + result["message"] == "null"
-                          ? result["error"].message
-                          : result["message"],
+                      _feedback,
                       maxFontSize: 20,
                       maxLines: 4,
                       style: _feedbackStyle,

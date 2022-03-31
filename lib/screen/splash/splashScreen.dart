@@ -51,7 +51,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.7,
+                      width: MediaQuery.of(context).size.width * 0.8,
                       child: AutoSizeText(
                         "Hello, Welcome to Digital Physiotherapy",
                         textAlign: TextAlign.center,
@@ -59,7 +59,7 @@ class _SplashScreenState extends State<SplashScreen> {
                         style: TextStyle(
                             color: Colors.white, fontWeight: FontWeight.bold),
                         maxFontSize: 32,
-                        minFontSize: 30,
+                        minFontSize: 26,
                       )),
                 ],
               ),

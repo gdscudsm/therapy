@@ -16,7 +16,7 @@ class ExerciseInstructionScreen extends StatefulWidget {
 class _ExerciseInstructionScreenState extends State<ExerciseInstructionScreen> {
   YoutubePlayerController _controller = YoutubePlayerController(
     initialVideoId: YoutubePlayer.convertUrlToId(
-        "https://www.youtube.com/watch?v=W-rHIsDFrzQ")!,
+        "https://www.youtube.com/watch?v=zngOY3T7zno")!,
     flags: YoutubePlayerFlags(
       autoPlay: false,
       mute: false,
